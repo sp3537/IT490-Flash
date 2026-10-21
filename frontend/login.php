@@ -11,9 +11,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ];
     $response = sendToBackend($request);
 
-    if (isSuccess($response) && !empty($response['sessionKey'])) {
+        $key = $response['sessionKey'] ?? $response['session_key'] ?? '';
+    if (isSuccess($response) && !empty($key)) {
         $_SESSION['username']   = $request['username'];
-        $_SESSION['sessionKey'] = $response['sessionKey'];
+        $_SESSION['sessionKey'] = $key;
         header("Location: home.php");
         exit();
     }

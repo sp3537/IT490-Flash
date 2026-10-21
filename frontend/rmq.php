@@ -9,6 +9,9 @@ function sendToBackend($request) {
 }
 
 function isSuccess($response) {
-    return is_array($response) && isset($response['returnCode']) && $response['returnCode'] == 1;
+    if (!is_array($response)) return false;
+    if (isset($response['returnCode']) && $response['returnCode'] == 1) return true;
+    if (isset($response['success']) && $response['success'] === true) return true;
+    return false;
 }
 ?>
