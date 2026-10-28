@@ -1,0 +1,80 @@
+<DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Authentication</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container">
+
+    <!-- Home Screen -->
+    <section id="home" class="screen">
+      <h1>Welcome!</h1>
+      <p>This is currently a Prototype website (P.S)Richardsucks.</p>
+      <button onclick="showScreen('login')">Login</button>
+      <button class="secondary"
+        onclick="showScreen('register')">Create Account</button>
+    </section>
+
+    <!-- Login Screen -->
+    <section id="login" class="screen hidden">
+      <h2>Login</h2>
+      <form id="loginForm">
+        <label for="loginEmail">Email</label>
+        <input id="loginEmail" type="email"
+          placeholder="you@example.com" required>
+
+        <label for="loginPassword">Password</label>
+        <input id="loginPassword" type="password"
+          placeholder="Your password" required>
+
+        <button type="submit">Login</button>
+      </form>
+      <p id="loginMessage" role="status"></p>
+      <p>Don't have an account?
+        <a href="#" onclick="showScreen('register')">Register</a>
+      </p>
+      <a href="#" onclick="showScreen('home')">Back to Home</a>
+    </section>
+
+    <!-- Registration Screen -->
+    <section id="register" class="screen hidden">
+      <h2>Create Account</h2>
+      <form id="registerForm">
+        <label for="registerName">Full Name</label>
+        <input id="registerName" type="text"
+          placeholder="Your name" required>
+
+        <label for="registerEmail">Email</label>
+        <input id="registerEmail" type="email"
+          placeholder="you@example.com" required>
+
+        <label for="registerPassword">Password</label>
+        <input id="registerPassword" type="password"
+          minlength="8" placeholder="At least 8 characters" required>
+
+        <button type="submit">Register</button>
+      </form>
+      <p id="registerMessage" role="status"></p>
+      <p>Already have an account?
+        <a href="#" onclick="showScreen('login')">Login</a>
+      </p>
+      <a href="#" onclick="showScreen('home')">Back to Home</a>
+    </section>
+
+    <!-- Logged-in Home Screen -->
+    <section id="dashboard" class="screen hidden">
+      <h1 id="welcomeMessage">Welcome!</h1>
+      <p>You are signed in to the demo.</p>
+      <button onclick="logout()">Logout</button>
+    </section>
+
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
+</head>
+</html>
+</DOCTYPE>
