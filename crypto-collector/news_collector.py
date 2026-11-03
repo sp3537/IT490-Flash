@@ -7,7 +7,8 @@ from email.utils import parsedate_to_datetime
 
 FEEDS = {
 	"CoinDesk": "https://www.coindesk.com/arc/outboundfeeds/rss/",
-	"Cointelegraph": "https://cointelegraph.com/rss"
+	"Cointelegraph": "https://cointelegraph.com/rss",
+	"Decrypt": "https://decrypt.co/feed"
 }
 
 articles = []
@@ -23,28 +24,28 @@ for source, url in FEEDS.items():
 	for entry in feed.entries[:10]:
 		link = entry.get("link", "")
 
-	if not link or link in seen:
-		continue
+		if not link or link in seen:
+			continue
 
-	seen.add(link)
+		seen.add(link)
 
-	published = datetime.now(timezone.utc)
+		published = datetime.now(timezone.utc)
 
-	if entry.get("published"):
-		try:
-			published = parsedate_to_datetime(
-				entry["published"]
-			).astimezone(timezone.utc)
-		except (ValueError, TypeError, OverflowError):
-			pass
+		if entry.get("published"):
+			try:
+				published = parsedate_to_datetime(
+					entry["published"]
+				).astimezone(timezone.utc)
+			except (ValueError, TypeError, OverflowError):
+				pass
 
-	articles.append({
-		"title": entry.get("title", "Untitled"),
-		"link": link,
-		"source": source,
-		"published": published.strftime("%Y-%m-%d %H:%M:%S"),
-		"summary": entry.get("summary", "")[:2000]
-	})
+		articles.append({
+			"title": entry.get("title", "Untitled"),
+			"link": link,
+			"source": source,
+			"published": published.strftime("%Y-%m-%d %H:%M:%S"),
+			"summary": entry.get("summary", "")[:2000]
+		})
 
 if not articles:
 	raise SystemExit("No news articles retrieved")
@@ -63,10 +64,10 @@ credentials = pika.PlainCredentials(
 
 connection = pika.BlockingConnection(
 	pika.ConnectionParameters(
-	host="localhost",
-	port=5672,
-	virtual_host="shlok",
-	credentials=credentials
+		host=os.environ.get("RABBITMQ_HOST", "localhost"),
+		port=5672,
+		virtual_host="shlok",
+		credentials=credentials
 	)
 )
 
@@ -79,11 +80,11 @@ channel.basic_publish(
 	body=json.dumps(message),
 	mandatory=True,
 	properties=pika.BasicProperties(
-	delivery_mode=2,
-	content_type="application/json"
+		delivery_mode=2,
+		content_type="application/json"
 	)
 )
 
 connection.close()
 
-print("Successfully sent news to RabbitMQ!")
+print(f"{datetime.now():%Y-%m-%d %H:%M:%S} sent {len(articles)} news articles to RabbitMQ")

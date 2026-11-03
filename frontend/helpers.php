@@ -1,4 +1,5 @@
 <?php
+
 function api($type, $data = []) {
     $data['type'] = $type;
     if (!empty($_SESSION['sessionKey'])) {

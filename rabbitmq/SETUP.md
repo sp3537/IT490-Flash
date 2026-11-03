@@ -29,3 +29,10 @@ sudo ufw allow 22/tcp
 sudo ufw allow from 100.85.120.3 to any port 5672 proto tcp
 sudo ufw allow from 100.118.36.30 to any port 5672 proto tcp
 sudo ufw enable
+
+## Market data
+Exchange: marketExchange (type: topic)
+Queue: marketDataQueue (bound to marketExchange with routing key market.#)
+Created by crypto-collector/setup_market.py
+
+The DB listener consumes both authQueue and marketDataQueue.

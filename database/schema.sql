@@ -1,0 +1,79 @@
+USE it490;
+
+CREATE TABLE IF NOT EXISTS wallets (
+  user_id INT PRIMARY KEY,
+  cash DECIMAL(18,2) NOT NULL DEFAULT 10000.00
+);
+
+CREATE TABLE IF NOT EXISTS user_settings (
+  user_id INT PRIMARY KEY,
+  email_alerts BOOLEAN NOT NULL DEFAULT TRUE,
+  text_alerts BOOLEAN NOT NULL DEFAULT FALSE,
+  phone VARCHAR(20) DEFAULT ''
+);
+
+CREATE TABLE IF NOT EXISTS coins (
+  coin_id VARCHAR(100) PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  symbol VARCHAR(20) NOT NULL,
+  price DECIMAL(24,10) NOT NULL,
+  change_24h DECIMAL(12,4) DEFAULT 0,
+  market_cap BIGINT DEFAULT 0,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS price_history (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  coin_id VARCHAR(100) NOT NULL,
+  price DECIMAL(24,10) NOT NULL,
+  recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_coin_time (coin_id, recorded_at)
+);
+
+CREATE TABLE IF NOT EXISTS holdings (
+  user_id INT NOT NULL,
+  coin_id VARCHAR(100) NOT NULL,
+  amount DECIMAL(24,10) NOT NULL,
+  avg_price DECIMAL(24,10) NOT NULL,
+  PRIMARY KEY (user_id, coin_id)
+);
+
+CREATE TABLE IF NOT EXISTS trades (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  coin_id VARCHAR(100) NOT NULL,
+  side ENUM('buy','sell') NOT NULL,
+  amount DECIMAL(24,10) NOT NULL,
+  price DECIMAL(24,10) NOT NULL,
+  total DECIMAL(18,2) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_user (user_id)
+);
+
+CREATE TABLE IF NOT EXISTS watchlist (
+  user_id INT NOT NULL,
+  coin_id VARCHAR(100) NOT NULL,
+  PRIMARY KEY (user_id, coin_id)
+);
+
+CREATE TABLE IF NOT EXISTS alerts (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  coin_id VARCHAR(100) NOT NULL,
+  direction ENUM('above','below') NOT NULL,
+  target_price DECIMAL(24,10) NOT NULL,
+  triggered BOOLEAN NOT NULL DEFAULT FALSE,
+  triggered_at TIMESTAMP NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_coin_open (coin_id, triggered)
+);
+
+CREATE TABLE IF NOT EXISTS news (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(500) NOT NULL,
+  link VARCHAR(700) NOT NULL,
+  source VARCHAR(100),
+  published DATETIME,
+  summary TEXT,
+  UNIQUE KEY uniq_link (link(255))
+);
