@@ -9,7 +9,6 @@ import bcrypt
 import pika
 import mysql.connector
 
-# RabbitMQ settings
 RABBITMQ_HOST = "100.113.206.1"
 RABBITMQ_PORT = 5672
 RABBITMQ_USER = "dkr"
@@ -18,17 +17,13 @@ RABBITMQ_VHOST = "shlok"
 AUTH_QUEUE = "authQueue"
 MARKET_QUEUE = "marketDataQueue"
 
-# MySQL settings
 DB_HOST = "localhost"
 DB_USER = "it490"
 DB_PASSWORD = "CHANGE_ME"
 DB_NAME = "it490"
 
-# Fake money every new account starts with
 STARTING_CASH = Decimal("10000.00")
 
-# Email notifications (Gmail: turn on 2-step verification, then make an App Password)
-# Leave SMTP_USER blank to just print notifications instead of emailing them
 SMTP_HOST = "smtp.gmail.com"
 SMTP_PORT = 587
 SMTP_USER = ""
@@ -54,9 +49,6 @@ def fail(message):
     return {"success": False, "message": message}
 
 
-# ---------------------------------------------------------------
-# Notifications
-# ---------------------------------------------------------------
 
 def notify(cursor, user_id, subject, text):
     cursor.execute(
@@ -97,9 +89,6 @@ def send_email(to_address, subject, text):
         print(f"Email to {to_address} failed: {error}")
 
 
-# ---------------------------------------------------------------
-# Accounts and sessions
-# ---------------------------------------------------------------
 
 def register_user(data):
     username = data.get("username")
@@ -187,7 +176,6 @@ def get_cash(cursor, user_id, lock=False):
     row = cursor.fetchone()
     if row:
         return Decimal(row["cash"])
-    # Accounts made before the trading system existed get a wallet the first time they need one
     cursor.execute("INSERT INTO wallets (user_id, cash) VALUES (%s, %s)", (user_id, STARTING_CASH))
     return STARTING_CASH
 
@@ -203,9 +191,6 @@ def coin_row(c):
     }
 
 
-# ---------------------------------------------------------------
-# Market
-# ---------------------------------------------------------------
 
 def get_market(data, cursor, user_id):
     search = (data.get("search") or "").strip()
@@ -268,9 +253,6 @@ def get_coin(data, cursor, user_id):
     return {"success": True, "message": "OK", "coin": coin_row(coin), "history": history}
 
 
-# ---------------------------------------------------------------
-# Trading
-# ---------------------------------------------------------------
 
 def read_amount(data):
     try:
@@ -432,9 +414,6 @@ def get_trades(data, cursor, user_id):
     return {"success": True, "message": "OK", "trades": trades}
 
 
-# ---------------------------------------------------------------
-# Watchlist and alerts
-# ---------------------------------------------------------------
 
 def get_watchlist(data, cursor, user_id):
     cursor.execute(
@@ -545,9 +524,6 @@ def get_news(data, cursor, user_id):
     return {"success": True, "message": "OK", "articles": articles}
 
 
-# ---------------------------------------------------------------
-# Data coming in from the DMZ collector
-# ---------------------------------------------------------------
 
 def store_prices(data, cursor):
     coins = data.get("coins") or []
@@ -609,9 +585,6 @@ def store_news(data, cursor):
     return {"success": True, "message": f"Stored {added} new articles"}
 
 
-# ---------------------------------------------------------------
-# Message routing
-# ---------------------------------------------------------------
 
 USER_ACTIONS = {
     "get_market": get_market,
