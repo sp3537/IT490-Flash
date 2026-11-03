@@ -1,4 +1,2 @@
-# Run on the RabbitMQ VM (shlokvm). Add these with: crontab -e
-# Prices every 5 minutes, news every 30 minutes
 */5 * * * * cd ~/IT490-Flash/crypto-collector && RABBITMQ_PASSWORD=CHANGE_ME COINGECKO_API_KEY=CHANGE_ME python3 price_collector.py >> prices.log 2>&1
 */30 * * * * cd ~/IT490-Flash/crypto-collector && RABBITMQ_PASSWORD=CHANGE_ME python3 news_collector.py >> news.log 2>&1
