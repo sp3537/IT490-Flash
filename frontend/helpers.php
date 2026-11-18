@@ -1,5 +1,4 @@
 <?php
-
 function api($type, $data = []) {
     $data['type'] = $type;
     if (!empty($_SESSION['sessionKey'])) {
@@ -55,7 +54,7 @@ function showError($msg) {
 }
 
 function pageTop($title) {
-    echo "<!DOCTYPE html>\n<html>\n<head>\n<meta charset='utf-8'>\n";
+    echo "<!DOCTYPE html>\n<html>\n<head>\n<meta charset='utf-8'>\n<meta name='viewport' content='width=device-width, initial-scale=1'>\n";
     echo "<title>" . h($title) . " - CryptoFlash</title>\n";
     echo "<link rel='stylesheet' href='style.css'>\n</head>\n<body>\n";
     include('nav.php');

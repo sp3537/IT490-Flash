@@ -22,10 +22,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Register</title>
   <style>
     body { font-family: Arial, sans-serif; background: #f2f2f2; }
-    .box { width: 320px; margin: 80px auto; background: white; padding: 25px; border-radius: 8px; }
+    .box { width: 90%; max-width: 320px; box-sizing: border-box; margin: 60px auto; background: white; padding: 25px; border-radius: 8px; }
     input { width: 100%; padding: 8px; margin: 6px 0 14px; box-sizing: border-box; }
     button { width: 100%; padding: 10px; background: #0066cc; color: white; border: none; border-radius: 4px; cursor: pointer; }
     .error { color: red; }

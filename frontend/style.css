@@ -41,3 +41,16 @@ button.small { background: #555; padding: 6px 10px; font-size: 13px; }
 .news-item a { font-size: 17px; font-weight: bold; text-decoration: none; }
 .news-item p { margin: 6px 0 0; color: #444; }
 form.inline button { margin-left: 4px; }
+
+@media (max-width: 700px) {
+  .container { margin: 10px; padding: 15px; }
+  .nav { flex-direction: column; align-items: flex-start; padding: 12px 15px; }
+  .nav .links { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 8px; }
+  .nav .links a, .nav .user { margin-left: 0; }
+  table { display: block; overflow-x: auto; white-space: nowrap; }
+  .cards { flex-direction: column; }
+  .card { min-width: 0; }
+  .card .value { font-size: 20px; }
+  input[type=text] { width: 100%; box-sizing: border-box; margin-bottom: 6px; }
+  .box select, .box input[type=number] { margin: 4px 0; }
+}
